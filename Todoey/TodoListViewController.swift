@@ -10,10 +10,14 @@ import UIKit
 class TodoListViewController: UITableViewController {
 
     var itemArray = ["Paint a painting", "Make a mandala", "Make a wired mesh"]
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     //MARK = TableView Datasource Methods
@@ -50,6 +54,10 @@ class TodoListViewController: UITableViewController {
             in
             print("Item added ---- \(textField.text!)")
             self.itemArray.append(textField.text!)
+            
+            //defaults are saved in a plist file. that's why a key is necessary
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
+
             self.tableView.reloadData()
         }
         alert.addTextField { (alertTextField) in
